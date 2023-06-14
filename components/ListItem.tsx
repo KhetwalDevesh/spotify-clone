@@ -1,5 +1,7 @@
 "use client";
 
+import useAuthModal from "@/hooks/useAuthModal";
+import { useUser } from "@/hooks/useUser";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FaPlay } from "react-icons/fa";
@@ -12,13 +14,19 @@ interface ListItemProps {
 
 const ListItem: React.FC<ListItemProps> = ({ image, name, href }) => {
 	const router = useRouter();
+	const authModal = useAuthModal();
+	const { user } = useUser();
 
 	const onClick = () => {
+		if (!user) {
+			return authModal.onOpen();
+		}
 		router.push(href);
 	};
 
 	return (
 		<button
+			onClick={onClick}
 			className="
             relative
             group
